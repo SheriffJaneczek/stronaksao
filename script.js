@@ -1,7 +1,7 @@
 /* ============================================================
    🔧 USTAWIENIA — ZMIEŃ TUTAJ
 ============================================================ */
-const SECRET_CODE = "";                              // 🔑 kod (cyfry)
+const SECRET_CODE = "4016";                              // 🔑 kod (cyfry)
 const RELATIONSHIP_START = "2025-09-25T18:00:00";        // 📅 data początku
 const ANNIVERSARY_MONTH = 9;                             // 🎂 miesiąc rocznicy
 const ANNIVERSARY_DAY = 25;                              // 🎂 dzień rocznicy
