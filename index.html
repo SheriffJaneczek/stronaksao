@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#d63384">
+  <title>Dla Ciebie 💕</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="img/ikona.png">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ================== BRAMKA Z KODEM ================== -->
+  <div id="lockScreen" class="lock-screen">
+    <div class="lock-hearts"></div>
+    <div class="lock-card">
+      <div class="lock-icon">🔐</div>
+      <h1 class="lock-title">Tylko dla Ciebie</h1>
+      <p class="lock-subtitle">
+        Wpisz nasz sekretny kod,<br>aby otworzyć tę stronę 💌
+      </p>
+      <div class="lock-input-wrap">
+        <input type="password" id="codeInput" class="lock-input"
+               placeholder="• • • •" inputmode="numeric" autocomplete="off" maxlength="20">
+      </div>
+      <button id="unlockBtn" class="lock-btn">Otwórz moje serce 💖</button>
+      <p id="lockMessage" class="lock-message"></p>
+      <p class="lock-hint">
+        Podpowiedź: <span id="hintText">Dodaj nasze roczniki. 💗</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- ================== WŁAŚCIWA STRONA ================== -->
+  <div id="mainContent" class="main-content hidden">
+
+    <!-- Efekty tła -->
+    <canvas id="particlesBg" class="particles-bg"></canvas>
+    <div class="aurora"></div>
+    <div class="hearts"></div>
+    <div class="petals"></div>
+
+    <!-- Pasek nawigacyjny -->
+    <nav class="navbar">
+      <div class="nav-logo">💖 Nasza historia</div>
+      <ul class="nav-links">
+        <li><a href="#hero">Start</a></li>
+        <li><a href="#counter">Licznik</a></li>
+        <li><a href="#letter">List</a></li>
+        <li><a href="#reasons">Powody</a></li>
+        <li><a href="#wheel">Koło</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#timeline">Oś</a></li>
+        <li><a href="#gallery">Galeria</a></li>
+        <li><a href="#video">Film</a></li>
+        <li><a href="#gifts">Prezenty</a></li>
+        <li><a href="#surprise">Niespodzianka</a></li>
+      </ul>
+      <div class="nav-buttons">
+        <button id="musicToggle" class="icon-btn" title="Muzyka">🎵</button>
+        <button id="themeToggle" class="icon-btn" title="Dzień/noc">🌙</button>
+      </div>
+    </nav>
+    <audio id="bgMusic" loop>
+      <source src="img/muzyka.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- HERO -->
+    <header id="hero" class="hero parallax-hero">
+      <div class="hero-glow"></div>
+      <h1 class="typing-title">Dla Ciebie, Kochanie 💖</h1>
+      <p class="subtitle">Kilka słów prosto z serca...</p>
+      <p class="compliment" id="compliment"></p>
+      <div class="hero-buttons">
+        <a href="#letter" class="btn btn-primary">Zobacz list 💌</a>
+        <button id="loveBtn" class="btn btn-love">Powiedz mi, że mnie kochasz 💗</button>
+        <button id="fireworksBtn" class="btn btn-fireworks">🎆 Fajerwerki</button>
+      </div>
+      <div id="loveCounter" class="love-counter">Kliknięcia: 0 💖</div>
+    </header>
+
+    <!-- LICZNIK + ROCZNICA -->
+    <section id="counter" class="counter-section">
+      <h2>Jesteśmy razem już:</h2>
+      <div class="counter-box">
+        <div class="counter-item"><span id="years">0</span><small>lat</small></div>
+        <div class="counter-item"><span id="days">0</span><small>dni</small></div>
+        <div class="counter-item"><span id="hours">0</span><small>godzin</small></div>
+        <div class="counter-item"><span id="minutes">0</span><small>minut</small></div>
+        <div class="counter-item"><span id="seconds">0</span><small>sekund</small></div>
+      </div>
+      <p class="anniv-info">🎂 Do następnej rocznicy: <span id="annivCountdown">...</span></p>
+    </section>
+
+    <!-- LIST -->
+    <section id="letter" class="letter">
+      <h2>Mój list do Ciebie</h2>
+      <div id="letterText" class="letter-text">
+        <p>Tu wpisz swój tekst — możesz napisać, jak się poznaliśmy, co w Tobie kochasz, za co jesteś wdzięczny...</p>
+        <p>Możesz dodać kolejne akapity. Pisz z serca — to najważniejsze. 💌</p>
+      </div>
+    </section>
+
+    <!-- POWODY -->
+    <section id="reasons" class="reasons">
+      <h2>Dlaczego Cię kocham 💕</h2>
+      <p class="section-sub">Kliknij każdą kartę, aby odkryć powód</p>
+      <div class="reason-grid">
+        <div class="reason-card" data-color="pink"><div class="reason-front">💗</div><div class="reason-back">Za Twój uśmiech</div></div>
+        <div class="reason-card" data-color="purple"><div class="reason-front">💜</div><div class="reason-back">Za Twoje serce</div></div>
+        <div class="reason-card" data-color="gold"><div class="reason-front">💛</div><div class="reason-back">Za Twoje ciepło</div></div>
+        <div class="reason-card" data-color="mint"><div class="reason-front">💚</div><div class="reason-back">Za wspólne chwile</div></div>
+        <div class="reason-card" data-color="blue"><div class="reason-front">💙</div><div class="reason-back">Za to, kim jesteś</div></div>
+        <div class="reason-card" data-color="orange"><div class="reason-front">🧡</div><div class="reason-back">Za każdy dzień</div></div>
+        <div class="reason-card" data-color="orange"><div class="reason-front">🤎</div><div class="reason-back">I za wszystko nie wymienione</div></div>
+      </div>
+    </section>
+
+    <!-- KOŁO FORTUNY -->
+    <section id="wheel" class="wheel-section">
+      <h2>Koło miłości 🎡</h2>
+      <p class="section-sub">Zakręć i zobacz, co dla Ciebie przygotowałem</p>
+      <div class="wheel-wrap">
+        <div class="wheel-pointer">▼</div>
+        <canvas id="wheelCanvas" width="400" height="400" class="wheel-canvas"></canvas>
+        <button id="spinBtn" class="btn btn-primary wheel-btn">Zakręć 🎯</button>
+      </div>
+      <p id="wheelResult" class="wheel-result"></p>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz" class="quiz-section">
+      <h2>Quiz miłosny ❓</h2>
+      <p class="section-sub">Sprawdź, jak dobrze znasz naszą historię</p>
+      <div class="quiz-box">
+        <div class="quiz-progress"><span id="quizProgress">Pytanie 1 / 5</span></div>
+        <h3 id="quizQuestion">Pytanie...</h3>
+        <div id="quizAnswers" class="quiz-answers"></div>
+        <p id="quizFeedback" class="quiz-feedback"></p>
+      </div>
+    </section>
+
+    <!-- OŚ CZASU -->
+    <section id="timeline" class="timeline-section">
+      <h2>Nasza oś czasu 📅</h2>
+      <div class="timeline">
+        <div class="timeline-item left"><div class="timeline-content"><h3>Poznaliśmy się</h3><p>25.09.2025 - Tego dnia dokładnie piewszy raz weszliśmy w konwersacje.</p></div></div>
+        <div class="timeline-item right"><div class="timeline-content"><h3>Pierwsza bliższa chwila</h3><p>21.01.2026 - W tym dniu byłaś u Oli akcja "drut kolczasty" wtedy właśnie pierwszy raz doszło miedzy nami do czegoś bliższego</p></div></div>
+        <div class="timeline-item left"><div class="timeline-content"><h3>Pierwsze walentynki</h3><p>14.02.2026 - przygotowałem ci mini kolaż zdjęć wtedy i zapytałem czy chcesz być też moją walentynką.</p></div></div>
+        <div class="timeline-item right"><div class="timeline-content"><h3>Pierwsze wspólne twoje imieniny</h3><p>05.03.2026 - Były myślę dal ciebie wyjątkowe przygotowałem ci alfabet, niezapomniane rzyczenia i parę jeszcze rzeczy.</p></div></div>
+        <div class="timeline-item left"><div class="timeline-content"><h3>Złote Ksałosie</h3><p>28.04.2026 - Wymyśliliśmy swięto złotych ksałosi za różne rzeczy które są robione w ekpie.</p></div></div>
+        <div class="timeline-item right"><div class="timeline-content"><h3>Disiaj</h3><p>Aktualnie siedzimy razem wszystko robimy razem i nie widziąc się tęsknimy.</p></div></div>
+    </div>
+    </section>
+
+    <!-- GALERIA (karuzela + siatka) -->
+    <section id="gallery" class="gallery">
+      <h2>Nasze wspomnienia 📸</h2>
+      <div class="carousel">
+        <button class="carousel-btn prev" id="prevBtn">‹</button>
+        <div class="carousel-track-container">
+          <div class="carousel-track" id="carouselTrack">
+            <div class="carousel-slide"><img src="img/zdjecie1.jpg" alt="1"><p>Nasza chwila 💕</p></div>
+            <div class="carousel-slide"><img src="img/zdjecie2.jpg" alt="2"><p>Razem zawsze 💖</p></div>
+            <div class="carousel-slide"><img src="img/zdjecie3.jpg" alt="3"><p>Najpiękniejsza 💗</p></div>
+            <div class="carousel-slide"><img src="img/zdjecie4.jpg" alt="4"><p>Mój świat 💘</p></div>
+            <div class="carousel-slide"><img src="img/zdjecie5.jpg" alt="5"><p>Z Tobą wszystko 💞</p></div>
+            <div class="carousel-slide"><img src="img/zdjecie6.jpg" alt="6"><p>Na zawsze 💝</p></div>
+          </div>
+        </div>
+        <button class="carousel-btn next" id="nextBtn">›</button>
+      </div>
+      <div class="carousel-dots" id="carouselDots"></div>
+      <div class="photos">
+        <div class="photo tilt"><img src="img/zdjecie1.jpg" alt="1"></div>
+        <div class="photo tilt"><img src="img/zdjecie2.jpg" alt="2"></div>
+        <div class="photo tilt"><img src="img/zdjecie3.jpg" alt="3"></div>
+        <div class="photo tilt"><img src="img/zdjecie4.jpg" alt="4"></div>
+      </div>
+    </section>
+
+    <!-- FILM -->
+    <section id="video" class="video-section">
+      <h2>Twój film 🎬</h2>
+      <video controls poster="img/miniatura.jpg">
+        <source src="img/nasz-film.mp4" type="video/mp4">
+      </video>
+    </section>
+
+    <!-- PREZENTY -->
+    <section id="gifts" class="gifts-section">
+      <h2>Prezenty dla Ciebie 🎁</h2>
+      <p class="section-sub">Kliknij każdy prezent, aby go rozpakować</p>
+      <div class="gifts-grid">
+        <div class="gift" data-message="Jesteś moim największym szczęściem 💖"><div class="gift-icon">🎁</div></div>
+        <div class="gift" data-message="Dziękuję, że jesteś 💕"><div class="gift-icon">🎁</div></div>
+        <div class="gift" data-message="Kocham Cię nad życie 💗"><div class="gift-icon">🎁</div></div>
+        <div class="gift" data-message="Z Tobą każdy dzień to święto 🎉"><div class="gift-icon">🎁</div></div>
+        <div class="gift" data-message="Jesteś moim marzeniem 💫"><div class="gift-icon">🎁</div></div>
+        <div class="gift" data-message="Na zawsze razem 💍"><div class="gift-icon">🎁</div></div>
+      </div>
+    </section>
+
+    <!-- KOPERTA -->
+    <section class="envelope-section">
+      <h2>Mam dla Ciebie wiadomość 💌</h2>
+      <div class="envelope" id="envelope">
+        <div class="envelope-flap"></div>
+        <div class="envelope-body">
+          <div class="envelope-letter">
+            <p>Kocham Cię najbardziej na świecie 💖</p>
+            <p>— Twój na zawsze</p>
+          </div>
+        </div>
+      </div>
+      <p class="envelope-hint">Kliknij kopertę, aby ją otworzyć</p>
+    </section>
+
+    <!-- NIESPODZIANKA -->
+    <section id="surprise" class="surprise-section">
+      <h2>Niespodzianka 🎉</h2>
+      <p>Kliknij przycisk poniżej, aby zobaczyć ukrytą wiadomość</p>
+      <button id="surpriseBtn" class="btn btn-surprise">Odkryj niespodziankę 🎊</button>
+      <div id="surpriseContent" class="surprise-content hidden">
+        <div class="surprise-box">
+          <p>Jesteś moim największym szczęściem 💖</p>
+          <p>Dziękuję, że jesteś 💕</p>
+          <p>Kocham Cię nad życie 💗</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRZYCISKI AKCJI -->
+    <section class="action-buttons">
+      <button id="confettiBtn" class="action-btn">🎉 Konfetti</button>
+      <button id="heartRainBtn" class="action-btn">💖 Deszcz serduszek</button>
+      <button id="messageBtn" class="action-btn">💌 Ukryta wiadomość</button>
+      <button id="scrollTopBtn" class="action-btn">⬆️ Do góry</button>
+    </section>
+
+    <!-- MINIGRA -->
+    <section class="minigame-section">
+      <h2>Złap serduszka 🎮</h2>
+      <p>Klikaj spadające serca — masz 20 sekund!</p>
+      <div class="minigame-box">
+        <div id="gameArea" class="game-area"></div>
+        <div class="game-hud">
+          <span>Wynik: <b id="gameScore">0</b></span>
+          <span>Czas: <b id="gameTime">20</b>s</span>
+          <button id="gameStartBtn" class="btn btn-primary">Start 🚀</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Zrobione z ❤️ specjalnie dla Ciebie</p>
+      <p class="date" id="date"></p>
+      <p class="stats">Wejść: <span id="visitCount">1</span> | Kliknięć serca: <span id="statsLove">0</span></p>
+    </footer>
+
+  </div>
+
+  <a href="#" id="backToTop" class="back-to-top">💗</a>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox hidden">
+    <span class="lightbox-close" id="lightboxClose">✕</span>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
