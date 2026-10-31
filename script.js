@@ -1,10 +1,10 @@
 /* ============================================================
    🔧 USTAWIENIA — ZMIEŃ TUTAJ
 ============================================================ */
-const SECRET_CODE = "4016";                              // 🔑 kod (cyfry)
-const RELATIONSHIP_START = "2025-09-25T18:00:00";        // 📅 data początku
-const ANNIVERSARY_MONTH = 9;                             // 🎂 miesiąc rocznicy
-const ANNIVERSARY_DAY = 25;                              // 🎂 dzień rocznicy
+const SECRET_CODE = "4016";
+const RELATIONSHIP_START = "2025-09-25T18:00:00";
+const ANNIVERSARY_MONTH = 9;
+const ANNIVERSARY_DAY = 25;
 
 /* ============================================================
    🔐 BRAMKA
@@ -87,31 +87,80 @@ function initMainPage() {
   initMinigame();
   initScrollObserver();
   initStats();
+  initHamburger();
+}
+
+/* ---------- Hamburger Menu ---------- */
+function initHamburger() {
+  const hamburger = document.getElementById('navHamburger');
+  const navLinks = document.getElementById('navLinks');
+
+  if (!hamburger || !navLinks) return;
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('open');
+  });
+
+  // Zamknij menu po kliknięciu linku
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('open');
+    });
+  });
+
+  // Zamknij menu po kliknięciu poza nim
+  document.addEventListener('click', e => {
+    if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('open');
+    }
+  });
 }
 
 /* ---------- Data w stopce ---------- */
 function setDate() {
   const d = new Date();
-  document.getElementById('date').textContent =
-    'Dzisiaj jest: ' + d.toLocaleDateString('pl-PL', {
+  const el = document.getElementById('date');
+  if (el) {
+    el.textContent = 'Dzisiaj jest: ' + d.toLocaleDateString('pl-PL', {
       day: 'numeric', month: 'long', year: 'numeric'
     });
+  }
 }
 
 /* ---------- Licznik czasu ---------- */
 function startCounter() {
   const start = new Date(RELATIONSHIP_START).getTime();
+  const els = {
+    years:   document.getElementById('years'),
+    days:    document.getElementById('days'),
+    hours:   document.getElementById('hours'),
+    minutes: document.getElementById('minutes'),
+    seconds: document.getElementById('seconds')
+  };
+
   function update() {
-    const sec = Math.floor((Date.now() - start) / 1000);
+    const diff = Date.now() - start;
+
+    // Obsługa przyszłej daty
+    if (diff < 0) {
+      Object.values(els).forEach(el => { if (el) el.textContent = '0'; });
+      return;
+    }
+
+    const sec = Math.floor(diff / 1000);
     const min = Math.floor(sec / 60);
     const hr  = Math.floor(min / 60);
     const days = Math.floor(hr / 24);
     const years = Math.floor(days / 365.25);
-    document.getElementById('years').textContent   = years;
-    document.getElementById('days').textContent    = days % 365;
-    document.getElementById('hours').textContent   = hr % 24;
-    document.getElementById('minutes').textContent = min % 60;
-    document.getElementById('seconds').textContent = sec % 60;
+
+    if (els.years)   els.years.textContent   = years;
+    if (els.days)    els.days.textContent    = days % 365;
+    if (els.hours)   els.hours.textContent   = hr % 24;
+    if (els.minutes) els.minutes.textContent = min % 60;
+    if (els.seconds) els.seconds.textContent = sec % 60;
   }
   update();
   setInterval(update, 1000);
@@ -119,15 +168,20 @@ function startCounter() {
 
 /* ---------- Licznik do rocznicy ---------- */
 function startAnniversaryCountdown() {
+  const el = document.getElementById('annivCountdown');
+  if (!el) return;
+
   function update() {
     const now = new Date();
     let next = new Date(now.getFullYear(), ANNIVERSARY_MONTH - 1, ANNIVERSARY_DAY);
-    if (next < now) next = new Date(now.getFullYear() + 1, ANNIVERSARY_MONTH - 1, ANNIVERSARY_DAY);
+    if (next <= now) {
+      next = new Date(now.getFullYear() + 1, ANNIVERSARY_MONTH - 1, ANNIVERSARY_DAY);
+    }
     const diff = next - now;
     const d = Math.floor(diff / 86400000);
     const h = Math.floor((diff % 86400000) / 3600000);
     const m = Math.floor((diff % 3600000) / 60000);
-    document.getElementById('annivCountdown').textContent = `${d} dni, ${h} godz., ${m} min`;
+    el.textContent = `${d} dni, ${h} godz., ${m} min`;
   }
   update();
   setInterval(update, 60000);
@@ -136,12 +190,17 @@ function startAnniversaryCountdown() {
 /* ---------- Efekt pisania w hero ---------- */
 function startTyping() {
   const el = document.querySelector('.typing-title');
+  if (!el) return;
+
   const text = el.textContent.trim();
   el.textContent = '';
   let i = 0;
   const interval = setInterval(() => {
     el.textContent = text.slice(0, ++i);
-    if (i >= text.length) { clearInterval(interval); el.classList.remove('typing-title'); }
+    if (i >= text.length) {
+      clearInterval(interval);
+      el.classList.remove('typing-title');
+    }
   }, 80);
 }
 
@@ -160,7 +219,9 @@ function showCompliment() {
     "Na zawsze razem 💍"
   ];
   const el = document.getElementById('compliment');
-  el.textContent = compliments[Math.floor(Math.random() * compliments.length)];
+  if (el) {
+    el.textContent = compliments[Math.floor(Math.random() * compliments.length)];
+  }
 }
 
 /* ============================================================
@@ -168,20 +229,30 @@ function showCompliment() {
 ============================================================ */
 function initParticles() {
   const canvas = document.getElementById('particlesBg');
+  if (!canvas) return;
+
   const ctx = canvas.getContext('2d');
-  let w, h, particles = [];
+  let w, h;
+  const particles = [];
   const emojis = ['✨', '💖', '⭐', '💫', '🌸'];
+  const PARTICLE_COUNT = Math.min(30, Math.floor(window.innerWidth / 50));
 
   function resize() {
     w = canvas.width = window.innerWidth;
     h = canvas.height = window.innerHeight;
   }
   resize();
-  window.addEventListener('resize', resize);
 
-  for (let i = 0; i < 30; i++) {
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 150);
+  });
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
     particles.push({
-      x: Math.random() * w, y: Math.random() * h,
+      x: Math.random() * (w || window.innerWidth),
+      y: Math.random() * (h || window.innerHeight),
       vx: (Math.random() - 0.5) * 0.5,
       vy: (Math.random() - 0.5) * 0.5,
       size: 10 + Math.random() * 15,
@@ -192,14 +263,15 @@ function initParticles() {
 
   function animate() {
     ctx.clearRect(0, 0, w, h);
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy;
+    for (const p of particles) {
+      p.x += p.vx;
+      p.y += p.vy;
       if (p.x < 0 || p.x > w) p.vx *= -1;
       if (p.y < 0 || p.y > h) p.vy *= -1;
       ctx.globalAlpha = p.alpha;
       ctx.font = p.size + 'px serif';
       ctx.fillText(p.emoji, p.x, p.y);
-    });
+    }
     ctx.globalAlpha = 1;
     requestAnimationFrame(animate);
   }
@@ -207,7 +279,7 @@ function initParticles() {
 }
 
 /* ============================================================
-   ✨ SMUGA ZA KURSOREM (kursor pozostaje widoczny)
+   ✨ SMUGA ZA KURSOREM
 ============================================================ */
 function initCustomCursor() {
   if (window.matchMedia('(hover: none)').matches) return;
@@ -222,7 +294,6 @@ function initCustomCursor() {
     const dy = e.clientY - lastY;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    /* Twórz element tylko jeśli minęło trochę czasu LUB myszka się ruszyła */
     if (now - lastTime < 40 || distance < 5) return;
     lastTime = now;
     lastX = e.clientX;
@@ -254,9 +325,14 @@ function initCustomCursor() {
 ============================================================ */
 function initCarousel() {
   const track = document.getElementById('carouselTrack');
-  const slides = track.querySelectorAll('.carousel-slide');
   const dotsContainer = document.getElementById('carouselDots');
+  if (!track || !dotsContainer) return;
+
+  const slides = track.querySelectorAll('.carousel-slide');
+  if (slides.length === 0) return;
+
   let currentIndex = 0;
+  let autoplayInterval;
 
   slides.forEach((_, i) => {
     const dot = document.createElement('span');
@@ -272,16 +348,34 @@ function initCarousel() {
     dots.forEach((d, idx) => d.classList.toggle('active', idx === currentIndex));
   }
 
-  document.getElementById('nextBtn').addEventListener('click', () => goTo(currentIndex + 1));
-  document.getElementById('prevBtn').addEventListener('click', () => goTo(currentIndex - 1));
-  setInterval(() => goTo(currentIndex + 1), 5000);
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayInterval = setInterval(() => goTo(currentIndex + 1), 5000);
+  }
 
+  function stopAutoplay() {
+    if (autoplayInterval) clearInterval(autoplayInterval);
+  }
+
+  const nextBtn = document.getElementById('nextBtn');
+  const prevBtn = document.getElementById('prevBtn');
+
+  if (nextBtn) nextBtn.addEventListener('click', () => { goTo(currentIndex + 1); startAutoplay(); });
+  if (prevBtn) prevBtn.addEventListener('click', () => { goTo(currentIndex - 1); startAutoplay(); });
+
+  startAutoplay();
+
+  // Swipe na mobile
   let startX = 0;
-  track.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+  track.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    stopAutoplay();
+  }, { passive: true });
   track.addEventListener('touchend', e => {
     const diff = startX - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) goTo(currentIndex + (diff > 0 ? 1 : -1));
-  });
+    startAutoplay();
+  }, { passive: true });
 }
 
 /* ============================================================
@@ -289,6 +383,8 @@ function initCarousel() {
 ============================================================ */
 function initWheel() {
   const canvas = document.getElementById('wheelCanvas');
+  if (!canvas) return;
+
   const ctx = canvas.getContext('2d');
   const items = [
     "Kocham Cię 💖", "Jesteś piękna 💕", "Moje szczęście 🌟",
@@ -302,14 +398,17 @@ function initWheel() {
   let spinning = false;
 
   function draw() {
-    ctx.clearRect(0, 0, 400, 400);
+    const size = Math.min(canvas.width, canvas.height);
+    const radius = size / 2 - 5;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
-    ctx.translate(200, 200);
+    ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.rotate(rotation);
     for (let i = 0; i < slices; i++) {
       ctx.beginPath();
       ctx.moveTo(0, 0);
-      ctx.arc(0, 0, 195, i * angle, (i + 1) * angle);
+      ctx.arc(0, 0, radius, i * angle, (i + 1) * angle);
       ctx.fillStyle = colors[i % colors.length];
       ctx.fill();
       ctx.strokeStyle = 'white';
@@ -319,40 +418,46 @@ function initWheel() {
       ctx.rotate(i * angle + angle / 2);
       ctx.textAlign = 'right';
       ctx.fillStyle = 'white';
-      ctx.font = 'bold 14px Poppins, sans-serif';
-      ctx.fillText(items[i], 175, 5);
+      ctx.font = `bold ${Math.max(12, radius / 14)}px Poppins, sans-serif`;
+      ctx.fillText(items[i], radius - 10, 5);
       ctx.restore();
     }
     ctx.restore();
   }
   draw();
 
-  document.getElementById('spinBtn').addEventListener('click', () => {
-    if (spinning) return;
-    spinning = true;
-    document.getElementById('wheelResult').textContent = '';
-    const start = rotation;
-    const end = rotation + Math.PI * 2 * (5 + Math.random() * 3) + Math.random() * Math.PI * 2;
-    const duration = 4000;
-    const t0 = performance.now();
+  const spinBtn = document.getElementById('spinBtn');
+  if (spinBtn) {
+    spinBtn.addEventListener('click', () => {
+      if (spinning) return;
+      spinning = true;
+      const resultEl = document.getElementById('wheelResult');
+      if (resultEl) resultEl.textContent = '';
 
-    function animate(now) {
-      const t = Math.min((now - t0) / duration, 1);
-      const ease = 1 - Math.pow(1 - t, 4);
-      rotation = start + (end - start) * ease;
-      draw();
-      if (t < 1) requestAnimationFrame(animate);
-      else {
-        const normalized = ((rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-        const pointerAngle = (Math.PI * 1.5 - normalized + Math.PI * 2) % (Math.PI * 2);
-        const idx = Math.floor(pointerAngle / angle);
-        document.getElementById('wheelResult').textContent = items[idx];
-        spinning = false;
-        burstHearts(window.innerWidth / 2, window.innerHeight / 2);
+      const start = rotation;
+      const end = rotation + Math.PI * 2 * (5 + Math.random() * 3) + Math.random() * Math.PI * 2;
+      const duration = 4000;
+      const t0 = performance.now();
+
+      function animate(now) {
+        const t = Math.min((now - t0) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 4);
+        rotation = start + (end - start) * ease;
+        draw();
+        if (t < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          const normalized = ((rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+          const pointerAngle = (Math.PI * 1.5 - normalized + Math.PI * 2) % (Math.PI * 2);
+          const idx = Math.floor(pointerAngle / angle);
+          if (resultEl) resultEl.textContent = items[idx];
+          spinning = false;
+          burstHearts(window.innerWidth / 2, window.innerHeight / 2);
+        }
       }
-    }
-    requestAnimationFrame(animate);
-  });
+      requestAnimationFrame(animate);
+    });
+  }
 }
 
 /* ============================================================
@@ -361,44 +466,58 @@ function initWheel() {
 function initQuiz() {
   const questions = [
     { q: "Kiedy powstała organizacja biały protokół?", a: ["05.01.2026", "24.11.2025", "13.06.2026", "30.01.2026"], correct: 0 },
-    { q: "Gdzie było nasze pierwsze spotkanie?", a: ["Na celach", "Na dachu budynku (jako stórca)", "Na mechaniku", "Na szpitalu"], correct: 1 },
+    { q: "Gdzie było nasze pierwsze spotkanie?", a: ["Na celach", "Na dachu budynku (jako stróżka)", "Na mechaniku", "Na szpitalu"], correct: 1 },
     { q: "Jakiego koloru są moje oczy?", a: ["Szare", "Zielone", "Brązowe", "Błękitne"], correct: 3 },
-    { q: "Co najbardziej we mnie kochasz", a: ["Wszystko", "Oczy", "Charakter", "Głos"], correct: 0 },
+    { q: "Co najbardziej we mnie kochasz?", a: ["Wszystko", "Oczy", "Charakter", "Głos"], correct: 0 },
     { q: "Kiedy mam urodziny?", a: ["13.02.2011", "13.03.2009", "13.04.2010", "13.03.2010"], correct: 3 }
   ];
-  let current = 0, score = 0;
-  const qEl = document.getElementById('quizQuestion');
-  const aEl = document.getElementById('quizAnswers');
-  const fbEl = document.getElementById('quizFeedback');
+  let current = 0, score = 0, answered = false;
+
+  const qEl   = document.getElementById('quizQuestion');
+  const aEl   = document.getElementById('quizAnswers');
+  const fbEl  = document.getElementById('quizFeedback');
   const progEl = document.getElementById('quizProgress');
 
+  if (!qEl || !aEl || !fbEl || !progEl) return;
+
   function render() {
+    answered = false;
+
     if (current >= questions.length) {
       qEl.textContent = `Twój wynik: ${score} / ${questions.length} 💖`;
       aEl.innerHTML = '';
-      fbEl.textContent = score === questions.length ? "Perfekcja! Znasz mnie na wylot 💕" : "Dobrze Ci idzie, Kochanie 💗";
+      fbEl.textContent = score === questions.length
+        ? "Perfekcja! Znasz mnie na wylot 💕"
+        : "Dobrze Ci idzie, Kochanie 💗";
       progEl.textContent = "Koniec quizu";
       return;
     }
+
     const q = questions[current];
     progEl.textContent = `Pytanie ${current + 1} / ${questions.length}`;
     qEl.textContent = q.q;
     fbEl.textContent = '';
     aEl.innerHTML = '';
+
     q.a.forEach((ans, i) => {
       const btn = document.createElement('button');
       btn.className = 'quiz-answer';
       btn.textContent = ans;
       btn.addEventListener('click', () => {
+        if (answered) return;
+        answered = true;
+
         if (i === q.correct) {
           btn.classList.add('correct');
           score++;
           fbEl.textContent = "Dobrze! 💖";
         } else {
           btn.classList.add('wrong');
+          // Pokaż poprawną odpowiedź
+          aEl.children[q.correct].classList.add('correct');
           fbEl.textContent = "Prawie! 💗";
         }
-        setTimeout(() => { current++; render(); }, 1200);
+        setTimeout(() => { current++; render(); }, 1500);
       });
       aEl.appendChild(btn);
     });
@@ -415,7 +534,8 @@ function initGifts() {
       if (g.classList.contains('opened')) return;
       g.classList.add('opened');
       g.textContent = g.dataset.message;
-      burstHearts(g.getBoundingClientRect().left + 60, g.getBoundingClientRect().top + 60);
+      const rect = g.getBoundingClientRect();
+      burstHearts(rect.left + rect.width / 2, rect.top + rect.height / 2);
     });
   });
 }
@@ -425,6 +545,7 @@ function initGifts() {
 ============================================================ */
 function initTiltCards() {
   if (window.matchMedia('(hover: none)').matches) return;
+
   document.querySelectorAll('.photo.tilt').forEach(card => {
     card.addEventListener('mousemove', e => {
       const r = card.getBoundingClientRect();
@@ -446,31 +567,49 @@ function initTiltCards() {
 function initLightbox() {
   const lb = document.getElementById('lightbox');
   const img = document.getElementById('lightboxImg');
+  const closeBtn = document.getElementById('lightboxClose');
+  if (!lb || !img || !closeBtn) return;
+
   document.querySelectorAll('.photo img, .carousel-slide img').forEach(im => {
     im.addEventListener('click', () => {
       img.src = im.src;
+      img.alt = im.alt || 'Powiększone zdjęcie';
       lb.classList.remove('hidden');
     });
   });
-  document.getElementById('lightboxClose').addEventListener('click', () => lb.classList.add('hidden'));
+
+  closeBtn.addEventListener('click', () => lb.classList.add('hidden'));
   lb.addEventListener('click', e => { if (e.target === lb) lb.classList.add('hidden'); });
+
+  // Zamknij ESC
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !lb.classList.contains('hidden')) {
+      lb.classList.add('hidden');
+    }
+  });
 }
 
 /* ============================================================
    💌 KOPERTA
 ============================================================ */
 function initEnvelope() {
-  document.getElementById('envelope').addEventListener('click', function () {
-    this.classList.toggle('open');
-  });
+  const envelope = document.getElementById('envelope');
+  if (envelope) {
+    envelope.addEventListener('click', function () {
+      this.classList.toggle('open');
+    });
+  }
 }
 
 /* ============================================================
    🎉 NIESPODZIANKA
 ============================================================ */
 function initSurprise() {
-  document.getElementById('surpriseBtn').addEventListener('click', () => {
-    const sc = document.getElementById('surpriseContent');
+  const btn = document.getElementById('surpriseBtn');
+  const sc = document.getElementById('surpriseContent');
+  if (!btn || !sc) return;
+
+  btn.addEventListener('click', () => {
     sc.classList.toggle('hidden');
     if (!sc.classList.contains('hidden')) burstConfetti();
   });
@@ -482,7 +621,10 @@ function initSurprise() {
 function initMusic() {
   const musicBtn = document.getElementById('musicToggle');
   const music = document.getElementById('bgMusic');
+  if (!musicBtn || !music) return;
+
   music.volume = 0.4;
+
   musicBtn.addEventListener('click', () => {
     if (music.paused) {
       music.play().catch(() => {});
@@ -501,9 +643,19 @@ function initMusic() {
 ============================================================ */
 function initThemeToggle() {
   const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+
+  // Zapamiętaj preferencję
+  if (localStorage.getItem('theme') === 'night') {
+    document.body.classList.add('night');
+    btn.textContent = '☀️';
+  }
+
   btn.addEventListener('click', () => {
     document.body.classList.toggle('night');
-    btn.textContent = document.body.classList.contains('night') ? '☀️' : '🌙';
+    const isNight = document.body.classList.contains('night');
+    btn.textContent = isNight ? '☀️' : '🌙';
+    localStorage.setItem('theme', isNight ? 'night' : 'day');
   });
 }
 
@@ -511,46 +663,74 @@ function initThemeToggle() {
    🎯 PRZYCISKI AKCJI
 ============================================================ */
 function initButtons() {
-  let loveCount = 0;
+  let loveCount = parseInt(localStorage.getItem('statsLove') || '0');
   const loveBtn = document.getElementById('loveBtn');
   const loveCounter = document.getElementById('loveCounter');
-  loveBtn.addEventListener('click', e => {
-    loveCount++;
+
+  if (loveBtn && loveCounter) {
     loveCounter.textContent = `Kliknięcia: ${loveCount} 💖`;
-    localStorage.setItem('statsLove', loveCount);
-    burstHearts(e.clientX, e.clientY);
-    if (navigator.vibrate) navigator.vibrate(50);
-  });
+    loveBtn.addEventListener('click', e => {
+      loveCount++;
+      loveCounter.textContent = `Kliknięcia: ${loveCount} 💖`;
+      localStorage.setItem('statsLove', loveCount);
+      burstHearts(e.clientX, e.clientY);
+      if (navigator.vibrate) navigator.vibrate(50);
 
-  document.getElementById('fireworksBtn').addEventListener('click', () => {
-    for (let i = 0; i < 5; i++) {
-      setTimeout(() => burstConfetti(), i * 300);
-    }
-  });
+      const statsLoveEl = document.getElementById('statsLove');
+      if (statsLoveEl) statsLoveEl.textContent = loveCount;
+    });
+  }
 
-  document.getElementById('confettiBtn').addEventListener('click', burstConfetti);
-  document.getElementById('heartRainBtn').addEventListener('click', heartRain);
+  const fireworksBtn = document.getElementById('fireworksBtn');
+  if (fireworksBtn) {
+    fireworksBtn.addEventListener('click', () => {
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => burstConfetti(), i * 300);
+      }
+    });
+  }
 
-  document.getElementById('messageBtn').addEventListener('click', () => {
-    const messages = [
-      "Jesteś moim całym światem 💖",
-      "Kocham Cię każdego dnia bardziej 💕",
-      "Dziękuję, że jesteś przy mnie 💗",
-      "Z Tobą wszystko jest możliwe 🌟",
-      "Jesteś moim marzeniem 💫",
-      "Na zawsze i o jeden dzień dłużej 💍"
-    ];
-    alert(messages[Math.floor(Math.random() * messages.length)]);
-  });
+  const confettiBtn = document.getElementById('confettiBtn');
+  if (confettiBtn) confettiBtn.addEventListener('click', burstConfetti);
 
-  document.getElementById('scrollTopBtn').addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  const heartRainBtn = document.getElementById('heartRainBtn');
+  if (heartRainBtn) heartRainBtn.addEventListener('click', heartRain);
+
+  const messageBtn = document.getElementById('messageBtn');
+  if (messageBtn) {
+    messageBtn.addEventListener('click', () => {
+      const messages = [
+        "Jesteś moim całym światem 💖",
+        "Kocham Cię każdego dnia bardziej 💕",
+        "Dziękuję, że jesteś przy mnie 💗",
+        "Z Tobą wszystko jest możliwe 🌟",
+        "Jesteś moim marzeniem 💫",
+        "Na zawsze i o jeden dzień dłużej 💍"
+      ];
+      alert(messages[Math.floor(Math.random() * messages.length)]);
+    });
+  }
+
+  const scrollTopBtn = document.getElementById('scrollTopBtn');
+  if (scrollTopBtn) {
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 
   const btt = document.getElementById('backToTop');
-  window.addEventListener('scroll', () => {
-    btt.classList.toggle('visible', window.scrollY > 400);
-  });
+  if (btt) {
+    let scrollTicking = false;
+    window.addEventListener('scroll', () => {
+      if (!scrollTicking) {
+        requestAnimationFrame(() => {
+          btt.classList.toggle('visible', window.scrollY > 400);
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    }, { passive: true });
+  }
 
   document.querySelectorAll('.reason-card').forEach(card => {
     card.addEventListener('click', () => card.classList.toggle('flipped'));
@@ -565,7 +745,10 @@ function initMinigame() {
   const scoreEl = document.getElementById('gameScore');
   const timeEl = document.getElementById('gameTime');
   const startBtn = document.getElementById('gameStartBtn');
-  let playing = false, score = 0, timeLeft = 20, heartInterval, timerInterval;
+  if (!area || !scoreEl || !timeEl || !startBtn) return;
+
+  let playing = false, score = 0, timeLeft = 20;
+  let heartInterval, timerInterval;
 
   function spawnHeart() {
     if (!playing) return;
@@ -614,7 +797,14 @@ function initMinigame() {
         playing = false;
         clearInterval(heartInterval);
         clearInterval(timerInterval);
-        area.innerHTML = `<p style="text-align:center;padding-top:180px;font-size:1.5rem;color:#d63384;font-family:'Dancing Script',cursive;">Koniec! Wynik: ${score} 💖</p>`;
+        area.innerHTML = `<p style="text-align:center;padding-top:${area.clientHeight / 2 - 20}px;font-size:1.5rem;color:#d63384;font-family:'Dancing Script',cursive;">Koniec! Wynik: ${score} 💖</p>`;
+
+        // Zapis najlepszego wyniku
+        const best = parseInt(localStorage.getItem('gameBest') || '0');
+        if (score > best) {
+          localStorage.setItem('gameBest', score);
+          area.innerHTML += `<p style="text-align:center;font-size:1.2rem;color:#8a2be2;font-family:'Dancing Script',cursive;">Nowy rekord! 🏆</p>`;
+        }
       }
     }, 1000);
   });
@@ -624,18 +814,21 @@ function initMinigame() {
    📜 OBSERVER (pojawianie sekcji)
 ============================================================ */
 function initScrollObserver() {
+  if (!('IntersectionObserver' in window)) return;
+
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
-        e.target.style.opacity = 1;
+        e.target.style.opacity = '1';
         e.target.style.transform = 'translateY(0)';
+        obs.unobserve(e.target); // Animuj tylko raz
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.1 });
 
   document.querySelectorAll('section, footer').forEach(el => {
-    if (el.classList.contains('lock-screen')) return;
-    el.style.opacity = 0;
+    if (el.closest('.lock-screen')) return;
+    el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';
     el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
     obs.observe(el);
@@ -648,24 +841,33 @@ function initScrollObserver() {
 function initStats() {
   const visits = (parseInt(localStorage.getItem('visitCount') || '0')) + 1;
   localStorage.setItem('visitCount', visits);
-  document.getElementById('visitCount').textContent = visits;
-  document.getElementById('statsLove').textContent = localStorage.getItem('statsLove') || '0';
+
+  const visitEl = document.getElementById('visitCount');
+  const statsEl = document.getElementById('statsLove');
+
+  if (visitEl) visitEl.textContent = visits;
+  if (statsEl) statsEl.textContent = localStorage.getItem('statsLove') || '0';
 }
 
 /* ============================================================
    💗 EFEKTY
 ============================================================ */
-function createFloating(x, y, emoji, size = 24, duration = 2000) {
+function createFloating(x, y, emoji, size, duration) {
+  size = size || 24;
+  duration = duration || 2000;
+
   const el = document.createElement('div');
   el.textContent = emoji;
-  el.style.cssText = `position:fixed;left:${x}px;top:${y}px;font-size:${size}px;pointer-events:none;z-index:9998;transition:transform ${duration}ms ease-out, opacity ${duration}ms ease-out;`;
+  el.style.cssText = `position:fixed;left:${x}px;top:${y}px;font-size:${size}px;pointer-events:none;z-index:9998;will-change:transform,opacity;transition:transform ${duration}ms ease-out, opacity ${duration}ms ease-out;`;
   document.body.appendChild(el);
+
   requestAnimationFrame(() => {
     const dx = (Math.random() - 0.5) * 300;
     const dy = -200 - Math.random() * 200;
     el.style.transform = `translate(${dx}px, ${dy}px) rotate(${Math.random() * 720 - 360}deg)`;
     el.style.opacity = '0';
   });
+
   setTimeout(() => el.remove(), duration);
 }
 
@@ -698,7 +900,8 @@ function heartRain() {
       const x = Math.random() * window.innerWidth;
       const el = document.createElement('div');
       el.textContent = '💖';
-      el.style.cssText = `position:fixed;left:${x}px;top:-40px;font-size:${18 + Math.random() * 20}px;pointer-events:none;z-index:9998;transition:transform ${3000 + Math.random() * 2000}ms linear, opacity 3s;`;
+      const duration = 3000 + Math.random() * 2000;
+      el.style.cssText = `position:fixed;left:${x}px;top:-40px;font-size:${18 + Math.random() * 20}px;pointer-events:none;z-index:9998;will-change:transform;transition:transform ${duration}ms linear, opacity 3s;`;
       document.body.appendChild(el);
       requestAnimationFrame(() => {
         el.style.transform = `translateY(${window.innerHeight + 80}px) rotate(${Math.random() * 720}deg)`;
@@ -722,6 +925,8 @@ function heartRain() {
         for (let i = 0; i < 10; i++) setTimeout(burstConfetti, i * 200);
         alert('🎉 Sekretna niespodzianka! Kocham Cię! 💖');
       }
-    } else pos = 0;
+    } else {
+      pos = 0;
+    }
   });
 })();

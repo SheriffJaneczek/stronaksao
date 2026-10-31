@@ -2,12 +2,16 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta name="theme-color" content="#d63384">
+  <meta name="description" content="Strona stworzona z miłością 💖">
   <title>Dla Ciebie 💕</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="img/ikona.png">
+  <link rel="apple-touch-icon" href="img/ikona.png">
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -45,7 +49,10 @@
     <!-- Pasek nawigacyjny -->
     <nav class="navbar">
       <div class="nav-logo">💖 Nasza historia</div>
-      <ul class="nav-links">
+      <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
         <li><a href="#hero">Start</a></li>
         <li><a href="#counter">Licznik</a></li>
         <li><a href="#letter">List</a></li>
@@ -55,6 +62,7 @@
         <li><a href="#timeline">Oś</a></li>
         <li><a href="#gallery">Galeria</a></li>
         <li><a href="#video">Film</a></li>
+        <li><a href="#alphabet">Alfabet</a></li>
         <li><a href="#gifts">Prezenty</a></li>
         <li><a href="#surprise">Niespodzianka</a></li>
       </ul>
@@ -63,7 +71,7 @@
         <button id="themeToggle" class="icon-btn" title="Dzień/noc">🌙</button>
       </div>
     </nav>
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" loop preload="none">
       <source src="img/muzyka.mp3" type="audio/mpeg">
     </audio>
 
@@ -96,50 +104,42 @@
 
     <!-- LIST -->
     <section id="letter" class="letter">
-<h2>Mój list do Ciebie</h2>
-<div id="letterText" class="letter-text">
-  <p>
-    Nie jest to ten sam list co na papierze, ale coś innego, wyjątkowego,
-    co, jak myślę, też Cię rozczuli. Będzie to list mini, ale treściwy.
-  </p>
-
-  <p>
-    Ta strona jest poświęcona Tobie i nam oraz naszym wspomnieniom.
-    Dużo myślałem nad tym, jak to zrobić i czy mi się uda. Może nie wszystko
-    zostało zrobione przeze mnie, bo aż tak nie potrafię, a większość podstaw
-    kodu napisał ChatGPT, ale starałem się, żeby to w ogóle działało i jakoś wyglądało.
-  </p>
-
-  <p>
-    Pewnie nie jest to nic wielkiego, ale jest tu parę naszych zdjęć oraz filmik,
-    do którego możesz wracać, ile chcesz. Możesz też sprawdzić wszystkie zamieszczone
-    tu rzeczy. Hasło lub kod dostępu celowo nie jest trudny, ale stworzony tak,
-    aby to było tylko nasze.
-  </p>
-
-  <p>
-    Przedstawia to naszą historię w skrócie, nasze wspomnienia, to, jak bardzo Cię
-    kocham i to, że chcę być zawsze przy Tobie. Chciałem stworzyć Ci miejsce,
-    do którego będziesz mogła wracać, kiedy zatęsknisz, będziesz chciała się uśmiechnąć
-    albo po prostu przypomnieć sobie nasze wspólne chwile.
-  </p>
-
-  <p>
-    Pamiętaj, że możesz do tego wracać, kiedy tylko będziesz chciała.
-    Jak będziesz chciała, to dorobię coś tam jeszcze, na przykład alfabet twój,
-    kolejne zdjęcia, wspomnienia czy cokolwiek innego, żeby wszystko, co nasze,
-    było w jednym miejscu.
-  </p>
-
-  <p>
-    I chyba właśnie o to mi najbardziej chodziło. Żeby stworzyć coś,
-    co będzie takim małym kawałkiem nas. ❤️
-  </p>
-
-  <p class="signature">
-    Janek &lt;3
-  </p>
-</div>
+      <h2>Mój list do Ciebie</h2>
+      <div id="letterText" class="letter-text">
+        <p>
+          Nie jest to ten sam list co na papierze, ale coś innego, wyjątkowego,
+          co, jak myślę, też Cię rozczuli. Będzie to list mini, ale treściwy.
+        </p>
+        <p>
+          Ta strona jest poświęcona Tobie i nam oraz naszym wspomnieniom.
+          Dużo myślałem nad tym, jak to zrobić i czy mi się uda. Może nie wszystko
+          zostało zrobione przeze mnie, bo aż tak nie potrafię, a większość podstaw
+          kodu napisał ChatGPT, ale starałem się, żeby to w ogóle działało i jakoś wyglądało.
+        </p>
+        <p>
+          Pewnie nie jest to nic wielkiego, ale jest tu parę naszych zdjęć oraz filmik,
+          do którego możesz wracać, ile chcesz. Możesz też sprawdzić wszystkie zamieszczone
+          tu rzeczy. Hasło lub kod dostępu celowo nie jest trudny, ale stworzony tak,
+          aby to było tylko nasze.
+        </p>
+        <p>
+          Przedstawia to naszą historię w skrócie, nasze wspomnienia, to, jak bardzo Cię
+          kocham i to, że chcę być zawsze przy Tobie. Chciałem stworzyć Ci miejsce,
+          do którego będziesz mogła wracać, kiedy zatęsknisz, będziesz chciała się uśmiechnąć
+          albo po prostu przypomnieć sobie nasze wspólne chwile.
+        </p>
+        <p>
+          Pamiętaj, że możesz do tego wracać, kiedy tylko będziesz chciała.
+          Jak będziesz chciała, to dorobię coś tam jeszcze, na przykład alfabet twój,
+          kolejne zdjęcia, wspomnienia czy cokolwiek innego, żeby wszystko, co nasze,
+          było w jednym miejscu.
+        </p>
+        <p>
+          I chyba właśnie o to mi najbardziej chodziło. Żeby stworzyć coś,
+          co będzie takim małym kawałkiem nas. ❤️
+        </p>
+        <p class="signature">Janek &lt;3</p>
+      </div>
     </section>
 
     <!-- POWODY -->
@@ -181,50 +181,91 @@
       </div>
     </section>
 
-    <!-- OŚ CZASU -->
+    <!-- OŚ CZASU (literówki naprawione ✅) -->
     <section id="timeline" class="timeline-section">
       <h2>Nasza oś czasu 📅</h2>
       <div class="timeline">
-        <div class="timeline-item left"><div class="timeline-content"><h3>Poznaliśmy się</h3><p>25.09.2025 - Tego dnia dokładnie piewszy raz weszliśmy w konwersacje.</p></div></div>
-        <div class="timeline-item right"><div class="timeline-content"><h3>Pierwsza bliższa chwila</h3><p>21.01.2026 - W tym dniu byłaś u Oli akcja "drut kolczasty" wtedy właśnie pierwszy raz doszło miedzy nami do czegoś bliższego</p></div></div>
-        <div class="timeline-item left"><div class="timeline-content"><h3>Pierwsze walentynki</h3><p>14.02.2026 - przygotowałem ci mini kolaż zdjęć wtedy i zapytałem czy chcesz być też moją walentynką.</p></div></div>
-        <div class="timeline-item right"><div class="timeline-content"><h3>Pierwsze wspólne twoje imieniny</h3><p>05.03.2026 - Były myślę dal ciebie wyjątkowe przygotowałem ci alfabet, niezapomniane rzyczenia i parę jeszcze rzeczy.</p></div></div>
-        <div class="timeline-item left"><div class="timeline-content"><h3>Złote Ksałosie</h3><p>28.04.2026 - Wymyśliliśmy swięto złotych ksałosi za różne rzeczy które są robione w ekpie.</p></div></div>
-        <div class="timeline-item right"><div class="timeline-content"><h3>Disiaj</h3><p>Aktualnie siedzimy razem wszystko robimy razem i nie widziąc się tęsknimy.</p></div></div>
-    </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>Poznaliśmy się</h3>
+            <p>25.09.2025 – Tego dnia dokładnie pierwszy raz weszliśmy w konwersację.</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>Pierwsza bliższa chwila</h3>
+            <p>21.01.2026 – W tym dniu byłaś u Oli, akcja „drut kolczasty". Wtedy właśnie pierwszy raz doszło między nami do czegoś bliższego.</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>Pierwsze walentynki</h3>
+            <p>14.02.2026 – Przygotowałem Ci mini kolaż zdjęć i zapytałem, czy chcesz być też moją walentynką.</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>Pierwsze wspólne Twoje imieniny</h3>
+            <p>05.03.2026 – Były, myślę, dla Ciebie wyjątkowe. Przygotowałem Ci alfabet, niezapomniane życzenia i parę jeszcze rzeczy.</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>Złote Ksałosie</h3>
+            <p>28.04.2026 – Wymyśliliśmy święto Złotych Ksałosi za różne rzeczy, które są robione w ekipie.</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>Dzisiaj</h3>
+            <p>Aktualnie siedzimy razem, wszystko robimy razem i nie widząc się – tęsknimy.</p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- GALERIA (karuzela + siatka) -->
+    <!-- GALERIA -->
     <section id="gallery" class="gallery">
       <h2>Nasze wspomnienia 📸</h2>
       <div class="carousel">
-        <button class="carousel-btn prev" id="prevBtn">‹</button>
+        <button class="carousel-btn prev" id="prevBtn" aria-label="Poprzednie">‹</button>
         <div class="carousel-track-container">
           <div class="carousel-track" id="carouselTrack">
-            <div class="carousel-slide"><img src="img/zdjecie1.jpg" alt="1"><p>Nasza chwila 💕</p></div>
-            <div class="carousel-slide"><img src="img/zdjecie2.jpg" alt="2"><p>Razem zawsze 💖</p></div>
-            <div class="carousel-slide"><img src="img/zdjecie3.jpg" alt="3"><p>Najpiękniejsza 💗</p></div>
-            <div class="carousel-slide"><img src="img/zdjecie4.jpg" alt="4"><p>Mój świat 💘</p></div>
-            <div class="carousel-slide"><img src="img/zdjecie5.jpg" alt="5"><p>Z Tobą wszystko 💞</p></div>
-            <div class="carousel-slide"><img src="img/zdjecie6.jpg" alt="6"><p>Na zawsze 💝</p></div>
+            <div class="carousel-slide"><img src="img/zdjecie1.jpg" alt="Nasza wspólna chwila" loading="lazy"><p>Nasza chwila 💕</p></div>
+            <div class="carousel-slide"><img src="img/zdjecie2.jpg" alt="Razem zawsze" loading="lazy"><p>Razem zawsze 💖</p></div>
+            <div class="carousel-slide"><img src="img/zdjecie3.jpg" alt="Najpiękniejsza" loading="lazy"><p>Najpiękniejsza 💗</p></div>
+            <div class="carousel-slide"><img src="img/zdjecie4.jpg" alt="Mój świat" loading="lazy"><p>Mój świat 💘</p></div>
+            <div class="carousel-slide"><img src="img/zdjecie5.jpg" alt="Z Tobą wszystko" loading="lazy"><p>Z Tobą wszystko 💞</p></div>
+            <div class="carousel-slide"><img src="img/zdjecie6.jpg" alt="Na zawsze" loading="lazy"><p>Na zawsze 💝</p></div>
           </div>
         </div>
-        <button class="carousel-btn next" id="nextBtn">›</button>
+        <button class="carousel-btn next" id="nextBtn" aria-label="Następne">›</button>
       </div>
       <div class="carousel-dots" id="carouselDots"></div>
       <div class="photos">
-        <div class="photo tilt"><img src="img/zdjecie1.jpg" alt="1"></div>
-        <div class="photo tilt"><img src="img/zdjecie2.jpg" alt="2"></div>
-        <div class="photo tilt"><img src="img/zdjecie3.jpg" alt="3"></div>
-        <div class="photo tilt"><img src="img/zdjecie4.jpg" alt="4"></div>
+        <div class="photo tilt"><img src="img/zdjecie1.jpg" alt="Zdjęcie 1" loading="lazy"></div>
+        <div class="photo tilt"><img src="img/zdjecie2.jpg" alt="Zdjęcie 2" loading="lazy"></div>
+        <div class="photo tilt"><img src="img/zdjecie3.jpg" alt="Zdjęcie 3" loading="lazy"></div>
+        <div class="photo tilt"><img src="img/zdjecie4.jpg" alt="Zdjęcie 4" loading="lazy"></div>
       </div>
     </section>
 
     <!-- FILM -->
     <section id="video" class="video-section">
       <h2>Twój film 🎬</h2>
-      <video controls poster="img/miniatura.jpg">
+      <video controls poster="img/miniatura.jpg" preload="none">
         <source src="img/nasz-film.mp4" type="video/mp4">
+        Twoja przeglądarka nie obsługuje odtwarzania wideo.
+      </video>
+    </section>
+
+    <!-- ALFABET – MEMOWY FILMIK (NOWA SEKCJA ✅) -->
+    <section id="alphabet" class="video-section alphabet-section">
+      <h2>Twój alfabet 🔤💕</h2>
+      <p class="section-sub">Ten memowy filmik, alfabet z Tobą 😂💖</p>
+      <video controls poster="img/alfabet-miniatura.png" preload="none">
+        <source src="img/alfabet.mp4" type="video/mp4">
+        Twoja przeglądarka nie obsługuje odtwarzania wideo.
       </video>
     </section>
 
@@ -298,15 +339,14 @@
       <p class="date" id="date"></p>
       <p class="stats">Wejść: <span id="visitCount">1</span> | Kliknięć serca: <span id="statsLove">0</span></p>
     </footer>
-
   </div>
 
-  <a href="#" id="backToTop" class="back-to-top">💗</a>
+  <a href="#" id="backToTop" class="back-to-top" aria-label="Powrót na górę">💗</a>
 
   <!-- LIGHTBOX -->
-  <div id="lightbox" class="lightbox hidden">
-    <span class="lightbox-close" id="lightboxClose">✕</span>
-    <img id="lightboxImg" src="" alt="">
+  <div id="lightbox" class="lightbox hidden" role="dialog" aria-label="Podgląd zdjęcia">
+    <span class="lightbox-close" id="lightboxClose" role="button" aria-label="Zamknij">✕</span>
+    <img id="lightboxImg" src="" alt="Powiększone zdjęcie">
   </div>
 
   <script src="script.js"></script>
