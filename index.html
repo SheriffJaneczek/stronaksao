@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#d63384">
+  <meta name="description" content="Zaawansowana strona stworzona z miłością 💖">
+  <title>Dla Ciebie 💕 | Nasz Świat</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="img/ikona.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+
+  <!-- ================== EKRAN BLOKADY ================== -->
+  <div id="lockScreen" class="lock-screen" role="dialog" aria-modal="true" aria-labelledby="lockTitle">
+    <div class="lock-hearts"></div>
+    <div class="lock-card">
+      <div class="lock-icon" id="lockIcon">🔐</div>
+      <h1 class="lock-title" id="lockTitle">Tylko dla Ciebie</h1>
+      <p class="lock-subtitle" id="lockSubtitle">Wpisz nasz sekretny kod,<br>aby otworzyć tę stronę 💌</p>
+      
+      <div class="lock-input-wrap">
+        <input type="password" id="codeInput" class="lock-input" placeholder="• • • •" inputmode="numeric" autocomplete="off" maxlength="20" aria-label="Sekretny kod dostępu">
+        <button type="button" id="toggleCodeVisibility" class="lock-eye-btn" title="Pokaż/ukryj kod" aria-label="Pokaż lub ukryj kod">👁️</button>
+      </div>
+
+      <label class="lock-remember">
+        <input type="checkbox" id="rememberSession" checked>
+        <span>Zapamiętaj moją sesję</span>
+      </label>
+
+      <button id="unlockBtn" class="lock-btn">Otwórz moje serce 💖</button>
+      <p id="lockMessage" class="lock-message" aria-live="polite"></p>
+      <p class="lock-hint">Podpowiedź: <span id="lockHintText">Dodaj nasze roczniki. 💗</span></p>
+    </div>
+  </div>
+
+  <!-- ================== GŁÓWNA APLIKACJA ================== -->
+  <div id="app" class="app-container hidden">
+    
+    <!-- Tło i efekty -->
+    <canvas id="particlesBg" class="particles-bg"></canvas>
+    <div class="aurora"></div>
+    <div class="hearts"></div>
+    <div class="petals"></div>
+
+    <!-- NAWIGACJA GÓRNA -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-logo" id="navLogo" data-view="home">💖 Nasza historia</div>
+
+      <div class="nav-tabs" id="navTabs">
+        <div class="nav-tab" data-view="home">
+          <button class="nav-tab-btn active" aria-haspopup="true" aria-expanded="false">🏠 Start <span class="caret">▾</span></button>
+          <div class="nav-dropdown">
+            <a href="#" data-view="home" data-scroll="hero">Powitanie</a>
+            <a href="#" data-view="home" data-scroll="counter">Licznik</a>
+            <a href="#" data-view="home" data-scroll="pulseHeart">Serce</a>
+            <a href="#" data-view="home" data-scroll="importantDates">Ważne daty</a>
+          </div>
+        </div>
+
+        <div class="nav-tab" data-view="my">
+          <button class="nav-tab-btn" aria-haspopup="true" aria-expanded="false">💌 My <span class="caret">▾</span></button>
+          <div class="nav-dropdown">
+            <a href="#" data-view="my" data-scroll="letter">List</a>
+            <a href="#" data-view="my" data-scroll="timeline">Oś czasu</a>
+            <a href="#" data-view="my" data-scroll="reasons">Powody</a>
+            <a href="#" data-view="my" data-scroll="gallery">Galeria</a>
+            <a href="#" data-view="my" data-scroll="video">Film</a>
+          </div>
+        </div>
+
+        <div class="nav-tab" data-view="fun">
+          <button class="nav-tab-btn" aria-haspopup="true" aria-expanded="false">🎮 Zabawa <span class="caret">▾</span></button>
+          <div class="nav-dropdown">
+            <a href="#" data-view="fun" data-scroll="wheel">Koło</a>
+            <a href="#" data-view="fun" data-scroll="lovenometer">Love Tester</a>
+            <a href="#" data-view="fun" data-scroll="quiz">Quiz</a>
+            <a href="#" data-view="fun" data-scroll="gifts">Prezenty</a>
+            <a href="#" data-view="fun" data-scroll="surprise">Niespodzianka</a>
+            <a href="#" data-view="fun" data-scroll="minigame">Minigra</a>
+          </div>
+        </div>
+
+        <div class="nav-tab" data-view="extra">
+          <button class="nav-tab-btn" aria-haspopup="true" aria-expanded="false">✨ Extra <span class="caret">▾</span></button>
+          <div class="nav-dropdown">
+            <a href="#" data-view="extra" data-scroll="achievements">Osiągnięcia 🏆</a>
+            <a href="#" data-view="extra" data-scroll="spotify">Muzyka</a>
+            <a href="#" data-view="extra" data-scroll="memoryWall">Wspomnienia</a>
+            <a href="#" data-view="extra" data-scroll="timeCapsule">Kapsuła</a>
+            <a href="#" data-view="extra" data-scroll="loveWeather">Pogoda</a>
+            <a href="#" data-view="extra" data-scroll="alphabet">Alfabet</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button id="musicToggle" class="icon-btn" title="Muzyka" aria-label="Włącz lub wyłącz muzykę">🎵</button>
+        <button id="themeToggle" class="icon-btn" title="Dzień/noc" aria-label="Przełącz motyw dnia i nocy">🌙</button>
+        <button id="lockAgainBtn" class="icon-btn lock-again-btn" title="Zablokuj stronę" aria-label="Zablokuj stronę">🔒</button>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <audio id="bgMusic" loop preload="none">
+      <source src="img/muzyka.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- ================== WIDOKI (SPA) ================== -->
+    <main id="mainViews">
+
+      <!-- WIDOK: HOME -->
+      <div class="view active" id="view-home">
+        <header id="hero" class="hero parallax-hero">
+          <div class="hero-glow"></div>
+          <h1 class="typing-title" id="heroTitle">Dla Ciebie, Kochanie 💖</h1>
+          <p class="subtitle" id="heroSubtitle">Kilka słów prosto z serca...</p>
+          <p class="compliment" id="compliment"></p>
+          <div class="hero-buttons">
+            <button class="btn btn-primary" data-view="my" data-scroll="letter">Zobacz list 💌</button>
+            <button id="loveBtn" class="btn btn-love">Powiedz mi, że mnie kochasz 💗</button>
+            <button id="fireworksBtn" class="btn btn-fireworks">🎆 Fajerwerki</button>
+            <button class="btn btn-outline" data-view="extra" data-scroll="achievements">🏆 Osiągnięcia (<span id="heroAchCount">0</span>)</button>
+          </div>
+          <div id="loveCounter" class="love-counter">Kliknięcia: 0 💖</div>
+        </header>
+
+        <section id="pulseHeart" class="pulse-section">
+          <div class="pulse-heart" id="pulseHeartEl" role="button" tabindex="0" aria-label="Pulsujące serce">
+            <span class="pulse-emoji">💖</span>
+          </div>
+          <p class="pulse-caption">Kliknij serce 💗</p>
+        </section>
+
+        <section id="counter" class="counter-section">
+          <h2>Jesteśmy razem już:</h2>
+          <div class="counter-box glass-card">
+            <div class="counter-item"><span id="years">0</span><small>lat</small></div>
+            <div class="counter-item"><span id="days">0</span><small>dni</small></div>
+            <div class="counter-item"><span id="hours">0</span><small>godzin</small></div>
+            <div class="counter-item"><span id="minutes">0</span><small>minut</small></div>
+            <div class="counter-item"><span id="seconds">0</span><small>sekund</small></div>
+          </div>
+          <p class="anniv-info">🎂 Do następnej rocznicy: <span id="annivCountdown">...</span></p>
+        </section>
+
+        <section id="importantDates" class="dates-section">
+          <h2>Ważne daty 📅</h2>
+          <p class="section-sub">Nasze urodziny i rocznica — z licznikiem do każdej</p>
+          <div class="dates-grid" id="datesGrid">
+            <!-- Generowane dynamicznie z config.js -->
+          </div>
+        </section>
+      </div>
+
+      <!-- WIDOK: MY -->
+      <div class="view" id="view-my">
+        <section id="letter" class="letter section-padding">
+          <h2>Mój list do Ciebie</h2>
+          <div id="letterText" class="letter-text glass-card">
+            <p>Nie jest to ten sam list co na papierze, ale coś innego, wyjątkowego, co, jak myślę, też Cię rozczuli. Będzie to list mini, ale treściwy.</p>
+            <p>Ta strona jest poświęcona Tobie i nam oraz naszym wspomnieniom. Dużo myślałem nad tym, jak to zrobić i czy mi się uda. Może nie wszystko zostało zrobione przeze mnie, bo aż tak nie potrafię, a większość podstaw kodu napisał ChatGPT, ale starałem się, żeby to w ogóle działało i jakoś wyglądało.</p>
+            <p>Pewnie nie jest to nic wielkiego, ale jest tu parę naszych zdjęć oraz filmik, do którego możesz wracać, ile chcesz. Możesz też sprawdzić wszystkie zamieszczone tu rzeczy. Hasło lub kod dostępu celowo nie jest trudny, ale stworzony tak, aby to było tylko nasze.</p>
+            <p>Przedstawia to naszą historię w skrócie, nasze wspomnienia, to, jak bardzo Cię kocham i to, że chcę być zawsze przy Tobie. Chciałem stworzyć Ci miejsce, do którego będziesz mogła wracać, kiedy zatęsknisz, będziesz chciała się uśmiechnąć albo po prostu przypomnieć sobie nasze wspólne chwile.</p>
+            <p>Pamiętaj, że możesz do tego wracać, kiedy tylko będziesz chciała. Jak będziesz chciała, to dorobię coś tam jeszcze, na przykład alfabet twój, kolejne zdjęcia, wspomnienia czy cokolwiek innego, żeby wszystko, co nasze, było w jednym miejscu.</p>
+            <p>I chyba właśnie o to mi najbardziej chodziło. Żeby stworzyć coś, co będzie takim małym kawałkiem nas. ❤️</p>
+            <p class="signature">Janek &lt;3</p>
+          </div>
+        </section>
+
+        <section id="reasons" class="reasons section-padding">
+          <h2>Dlaczego Cię kocham 💕</h2>
+          <p class="section-sub">Kliknij każdą kartę, aby odkryć powód</p>
+          <div class="reason-grid">
+            <div class="reason-card" data-color="pink"><div class="reason-front">💗</div><div class="reason-back">Za Twój uśmiech</div></div>
+            <div class="reason-card" data-color="purple"><div class="reason-front">💜</div><div class="reason-back">Za Twoje serce</div></div>
+            <div class="reason-card" data-color="gold"><div class="reason-front">💛</div><div class="reason-back">Za Twoje ciepło</div></div>
+            <div class="reason-card" data-color="mint"><div class="reason-front">💚</div><div class="reason-back">Za wspólne chwile</div></div>
+            <div class="reason-card" data-color="blue"><div class="reason-front">💙</div><div class="reason-back">Za to, kim jesteś</div></div>
+            <div class="reason-card" data-color="orange"><div class="reason-front">🧡</div><div class="reason-back">Za każdy dzień</div></div>
+            <div class="reason-card" data-color="orange"><div class="reason-front">🤎</div><div class="reason-back">I za wszystko nie wymienione</div></div>
+          </div>
+        </section>
+
+        <section id="timeline" class="timeline-section section-padding">
+          <h2>Nasza oś czasu 📅</h2>
+          <div class="timeline">
+            <div class="timeline-item left">
+              <div class="timeline-content glass-card">
+                <h3>Poznaliśmy się</h3>
+                <p>25.09.2025 – Tego dnia dokładnie pierwszy raz weszliśmy w konwersację.</p>
+              </div>
+            </div>
+            <div class="timeline-item right">
+              <div class="timeline-content glass-card">
+                <h3>Pierwsza bliższa chwila</h3>
+                <p>21.01.2026 – W tym dniu byłaś u Oli, akcja „drut kolczasty". Wtedy właśnie pierwszy raz doszło między nami do czegoś bliższego.</p>
+              </div>
+            </div>
+            <div class="timeline-item left">
+              <div class="timeline-content glass-card">
+                <h3>Pierwsze walentynki</h3>
+                <p>14.02.2026 – Przygotowałem Ci mini kolaż zdjęć i zapytałem, czy chcesz być też moją walentynką.</p>
+              </div>
+            </div>
+            <div class="timeline-item right">
+              <div class="timeline-content glass-card">
+                <h3>Pierwsze wspólne Twoje imieniny</h3>
+                <p>05.03.2026 – Były, myślę, dla Ciebie wyjątkowe. Przygotowałem Ci alfabet, niezapomniane życzenia i parę jeszcze rzeczy.</p>
+              </div>
+            </div>
+            <div class="timeline-item left">
+              <div class="timeline-content glass-card">
+                <h3>Złote Ksałosie</h3>
+                <p>28.04.2026 – Wymyśliliśmy święto Złotych Ksałosi za różne rzeczy, które są robione w ekipie.</p>
+              </div>
+            </div>
+            <div class="timeline-item right">
+              <div class="timeline-content glass-card">
+                <h3>Dzisiaj</h3>
+                <p>Aktualnie siedzimy razem, wszystko robimy razem i nie widząc się – tęsknimy.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="gallery" class="gallery section-padding">
+          <h2>Nasze wspomnienia 📸</h2>
+          <div class="carousel glass-card">
+            <button class="carousel-btn prev" id="prevBtn" aria-label="Poprzednie">‹</button>
+            <div class="carousel-track-container">
+              <div class="carousel-track" id="carouselTrack">
+                <div class="carousel-slide"><img src="img/zdjecie1.jpg" alt="Nasza wspólna chwila" loading="lazy"><p>Nasza chwila 💕</p></div>
+                <div class="carousel-slide"><img src="img/zdjecie2.jpg" alt="Razem zawsze" loading="lazy"><p>Razem zawsze 💖</p></div>
+                <div class="carousel-slide"><img src="img/zdjecie3.jpg" alt="Najpiękniejsza" loading="lazy"><p>Najpiękniejsza 💗</p></div>
+                <div class="carousel-slide"><img src="img/zdjecie4.jpg" alt="Mój świat" loading="lazy"><p>Mój świat 💘</p></div>
+                <div class="carousel-slide"><img src="img/zdjecie5.jpg" alt="Z Tobą wszystko" loading="lazy"><p>Z Tobą wszystko 💞</p></div>
+                <div class="carousel-slide"><img src="img/zdjecie6.jpg" alt="Na zawsze" loading="lazy"><p>Na zawsze 💝</p></div>
+              </div>
+            </div>
+            <button class="carousel-btn next" id="nextBtn" aria-label="Następne">›</button>
+          </div>
+          <div class="carousel-dots" id="carouselDots"></div>
+          <div class="photos">
+            <div class="photo tilt"><img src="img/zdjecie1.jpg" alt="Zdjęcie 1" loading="lazy"></div>
+            <div class="photo tilt"><img src="img/zdjecie2.jpg" alt="Zdjęcie 2" loading="lazy"></div>
+            <div class="photo tilt"><img src="img/zdjecie3.jpg" alt="Zdjęcie 3" loading="lazy"></div>
+            <div class="photo tilt"><img src="img/zdjecie4.jpg" alt="Zdjęcie 4" loading="lazy"></div>
+          </div>
+        </section>
+
+        <section id="video" class="video-section section-padding">
+          <h2>Twój film 🎬</h2>
+          <video id="mainVideo" controls poster="img/miniatura.jpg" preload="none" class="glass-card" style="width:100%; border-radius:20px;">
+            <source src="img/nasz-film.mp4" type="video/mp4">
+            Twoja przeglądarka nie obsługuje odtwarzania wideo.
+          </video>
+        </section>
+      </div>
+
+      <!-- WIDOK: FUN -->
+      <div class="view" id="view-fun">
+        <section id="wheel" class="wheel-section section-padding">
+          <h2>Koło miłości 🎡</h2>
+          <p class="section-sub">Zakręć i zobacz, co dla Ciebie przygotowałem</p>
+          <div class="wheel-wrap">
+            <div class="wheel-pointer">▼</div>
+            <canvas id="wheelCanvas" width="400" height="400" class="wheel-canvas"></canvas>
+            <button id="spinBtn" class="btn btn-primary wheel-btn">Zakręć 🎯</button>
+          </div>
+          <p id="wheelResult" class="wheel-result"></p>
+        </section>
+
+        <section id="lovenometer" class="lovenometer-section section-padding">
+          <h2>Love Tester 💘</h2>
+          <p class="section-sub">Wpisz dwa imiona i sprawdź zgodność</p>
+          <div class="lovenometer-box glass-card">
+            <input type="text" id="loveName1" class="love-input" placeholder="Twoje imię" maxlength="20">
+            <span class="love-plus">+</span>
+            <input type="text" id="loveName2" class="love-input" placeholder="Jej imię" maxlength="20">
+            <button id="loveTestBtn" class="btn btn-primary">Sprawdź 💘</button>
+          </div>
+          <div id="loveTestResult" class="love-result"></div>
+        </section>
+
+        <section id="quiz" class="quiz-section section-padding">
+          <h2>Quiz miłosny ❓</h2>
+          <p class="section-sub">3 poziomy — sprawdź, jak dobrze znasz naszą historię</p>
+          <div class="quiz-levels" id="quizLevels">
+            <button class="quiz-level-btn active" data-level="easy">😊 Łatwy</button>
+            <button class="quiz-level-btn" data-level="medium">😎 Średni</button>
+            <button class="quiz-level-btn" data-level="hard">🔥 Trudny</button>
+          </div>
+          <div class="quiz-box glass-card">
+            <div class="quiz-progress"><span id="quizProgress">Pytanie 1 / 5</span></div>
+            <h3 id="quizQuestion">Pytanie...</h3>
+            <div id="quizAnswers" class="quiz-answers"></div>
+            <p id="quizFeedback" class="quiz-feedback"></p>
+            <button id="quizRestart" class="btn btn-love quiz-restart hidden">Zagraj ponownie 🔄</button>
+          </div>
+          <p class="quiz-best">Najlepszy wynik: <span id="quizBest">0</span> / 5</p>
+        </section>
+
+        <section id="gifts" class="gifts-section section-padding">
+          <h2>Prezenty dla Ciebie 🎁</h2>
+          <p class="section-sub">Kliknij każdy prezent, aby go rozpakować</p>
+          <div class="gifts-grid">
+            <div class="gift" data-message="Jesteś moim największym szczęściem 💖"><div class="gift-icon">🎁</div></div>
+            <div class="gift" data-message="Dziękuję, że jesteś 💕"><div class="gift-icon">🎁</div></div>
+            <div class="gift" data-message="Kocham Cię nad życie 💗"><div class="gift-icon">🎁</div></div>
+            <div class="gift" data-message="Z Tobą każdy dzień jest piękny 🎉"><div class="gift-icon">🎁</div></div>
+            <div class="gift" data-message="Jesteś moim marzeniem 💫"><div class="gift-icon">🎁</div></div>
+            <div class="gift" data-message="Na zawsze razem 💍"><div class="gift-icon">🎁</div></div>
+          </div>
+        </section>
+
+        <section id="surprise" class="surprise-section section-padding">
+          <h2>Niespodzianka 🎉</h2>
+          <p>Kliknij przycisk poniżej, aby zobaczyć ukrytą wiadomość</p>
+          <button id="surpriseBtn" class="btn btn-surprise">Odkryj niespodziankę 🎊</button>
+          <div id="surpriseContent" class="surprise-content hidden">
+            <div class="surprise-box glass-card">
+              <p>Jesteś moim największym szczęściem 💖</p>
+              <p>Dziękuję, że jesteś 💕</p>
+              <p>Kocham Cię nad życie 💗</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="minigame" class="minigame-section section-padding">
+          <h2>Złap serduszka 🎮</h2>
+          <p>Klikaj spadające serca — masz 20 sekund!</p>
+          <div class="minigame-box glass-card">
+            <div id="gameArea" class="game-area"></div>
+            <div class="game-hud">
+              <span>Wynik: <b id="gameScore">0</b></span>
+              <span>Czas: <b id="gameTime">20</b>s</span>
+              <button id="gameStartBtn" class="btn btn-primary">Start 🚀</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- WIDOK: EXTRA -->
+      <div class="view" id="view-extra">
+        <section id="achievements" class="achievements-section section-padding">
+          <h2>Nasze Osiągnięcia 🏆</h2>
+          <p class="section-sub">Kliknij dowolne osiągnięcie, aby je odznaczyć jako wykonane (lub cofnąć), albo odblokowuj je podczas zwiedzania strony!</p>
+          
+          <div class="steam-panel glass-card">
+            <div class="steam-top-bar">
+              <div>
+                <h3 class="steam-panel-title">Postęp kolekcji</h3>
+                <div class="steam-header">
+                  <span>Zdobyto <strong id="achievementsCount">0</strong> z <strong id="achievementsTotal">0</strong></span>
+                  <span class="steam-percent" id="achPercent">(0%)</span>
+                </div>
+              </div>
+              <button id="resetAchievementsBtn" class="ach-reset-btn" title="Wyzeruj wszystkie osiągnięcia">🔄 Resetuj postęp</button>
+            </div>
+
+            <div class="steam-bar">
+              <div id="achProgressFill" class="steam-bar-fill"></div>
+            </div>
+
+            <!-- Filtry i wyszukiwarka osiągnięć -->
+            <div class="ach-controls">
+              <input type="text" id="achSearch" class="ach-search-input" placeholder="🔍 Szukaj osiągnięcia (np. Jehowych, kawa, Ksałosie)...">
+              
+              <div class="ach-filter-row" id="achStatusFilters">
+                <button class="ach-filter-btn active" data-status="all">Wszystkie</button>
+                <button class="ach-filter-btn" data-status="unlocked">✅ Zdobyte</button>
+                <button class="ach-filter-btn" data-status="locked">🔒 Do zdobycia</button>
+              </div>
+
+              <div class="ach-filter-row" id="achCategoryFilters">
+                <!-- Generowane dynamicznie z kategorii w config.js -->
+              </div>
+            </div>
+
+            <div id="achievementsGrid" class="steam-grid"></div>
+          </div>
+        </section>
+
+        <section id="spotify" class="spotify-section section-padding">
+          <h2>Nasze piosenki 🎵</h2>
+          <p class="section-sub">Playlista, którą stworzyłem dla Ciebie</p>
+          <div class="spotify-embed glass-card">
+            <iframe src="https://open.spotify.com/embed/playlist/3SbLsMQNDcExqaCUFt4lI0?utm_source=generator&theme=0" width="100%" height="420" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Nasza playlista Spotify"></iframe>
+          </div>
+        </section>
+
+        <section id="memoryWall" class="memory-section section-padding">
+          <h2>Ściana wspomnień 💬</h2>
+          <p class="section-sub">Dodawaj nasze wspomnienia — zapisują się w tej przeglądarce</p>
+          <div class="memory-form glass-card">
+            <input type="text" id="memoryTitle" class="memory-input" placeholder="Tytuł wspomnienia" maxlength="60">
+            <textarea id="memoryText" class="memory-textarea" placeholder="Opisz nasze wspomnienie..." maxlength="500"></textarea>
+            <button id="memoryAdd" class="btn btn-primary">Dodaj wspomnienie 💖</button>
+          </div>
+          <div id="memoryList" class="memory-list"></div>
+        </section>
+
+        <section id="timeCapsule" class="capsule-section section-padding">
+          <h2>Kapsuła czasu 💌</h2>
+          <p class="section-sub">Napisz wiadomość do siebie z przyszłości — otworzy się w wybranym dniu</p>
+          <div class="capsule-form glass-card">
+            <input type="text" id="capsuleTitle" class="memory-input" placeholder="Tytuł kapsuły" maxlength="60">
+            <textarea id="capsuleText" class="memory-textarea" placeholder="Twoja wiadomość do przyszłości..." maxlength="1000"></textarea>
+            <label class="capsule-label">
+              Otwórz dnia:
+              <input type="date" id="capsuleDate" class="capsule-date">
+            </label>
+            <button id="capsuleAdd" class="btn btn-primary">Zakop kapsułę 🕰️</button>
+          </div>
+          <div id="capsuleList" class="capsule-list"></div>
+        </section>
+
+        <section id="loveWeather" class="weather-section section-padding">
+          <h2>Pogoda miłości 🌧️</h2>
+          <p class="section-sub">Jaka aura panuje dziś w naszym sercu?</p>
+          <div class="weather-box glass-card">
+            <div id="weatherIcon" class="weather-icon">☀️</div>
+            <div id="weatherText" class="weather-text">Słońce miłości świeci pełną mocą!</div>
+            <div id="weatherTemp" class="weather-temp">100° miłości</div>
+          </div>
+        </section>
+
+        <section id="alphabet" class="video-section alphabet-section section-padding">
+          <h2>Twój alfabet 🔤💕</h2>
+          <p class="section-sub">Ten memowy filmik, alfabet z Tobą 😂💖</p>
+          <video id="alphabetVideo" controls poster="img/alfabet-miniatura.png" preload="none" class="glass-card" style="width:100%; border-radius:20px;">
+            <source src="img/alfabet.mp4" type="video/mp4">
+            Twoja przeglądarka nie obsługuje odtwarzania wideo.
+          </video>
+        </section>
+      </div>
+
+    </main>
+
+    <!-- STOPKA -->
+    <footer>
+      <p>Zrobione z ❤️ specjalnie dla Ciebie</p>
+      <p class="date" id="date"></p>
+      <p class="stats">Wejść: <span id="visitCount">1</span> | Kliknięć serca: <span id="statsLove">0</span></p>
+      <div class="footer-badges">
+        <span class="badge">💻 HTML/CSS/JS</span>
+        <span class="badge">🚀 Wersja 3.0 Pro</span>
+      </div>
+    </footer>
+  </div>
+
+  <a href="#" id="backToTop" class="back-to-top" aria-label="Powrót na górę">💗</a>
+
+  <div id="lightbox" class="lightbox hidden" role="dialog" aria-label="Podgląd zdjęcia">
+    <span class="lightbox-close" id="lightboxClose" role="button" aria-label="Zamknij">✕</span>
+    <img id="lightboxImg" src="" alt="Powiększone zdjęcie">
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- SKRYPTY (Najpierw plik konfiguracyjny, potem logika) -->
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
